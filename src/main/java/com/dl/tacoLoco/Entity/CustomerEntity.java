@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "CUSTOMERS")
-public class Customer {
+public class CustomerEntity {
 	@Id @GeneratedValue
 	@Column(name = "ID")
 	private long id;
@@ -28,7 +28,22 @@ public class Customer {
 	@Column(name = "ZIPCODE")
 	private String zipcode;
 
-	public Customer() {}
+	public CustomerEntity() {}
+	
+	public CustomerEntity(int id, String name, String address, String state, String city, String zipcode) {
+		this.id = id;
+		this.name = name;
+		this.address = address;
+		this.state = state;
+		this.city = city;
+		this.zipcode = zipcode;
+	}
+	
+	@Override
+	public String toString() {
+		return "CustomerEntity [id=" + id + ", name=" + name + ", address=" + address 
+				+ ", state=" + state + ", city=" + city + ", zipcode=" + zipcode + "]";
+	}
 	
 	public long getId() {
 		return id;
