@@ -1,52 +1,78 @@
 package com.dl.tacoLoco.Controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dl.tacoLoco.Dao.CustomerDao;
-import com.dl.tacoLoco.Entity.CustomerEntity;
-import com.dl.tacoLoco.Exception.RecordNotFoundException;
+import com.dl.tacoLoco.Entity.Customer;
+import com.dl.tacoLoco.Exception.ResourceNotFoundException;
+import com.dl.tacoLoco.Repository.CustomerRepository;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/api/v1")
 public class CustomerController {
 	@Autowired
-	CustomerDao customerService;
+	private CustomerRepository customerRepository;
 	
-	@GetMapping
-	public ResponseEntity<List<CustomerEntity>> getAllCustomers() {
-		List<CustomerEntity> list = customerService.getAllCustomers();
-		
-		return new ResponseEntity<List<CustomerEntity>>(list, new HttpHeaders(), HttpStatus.OK);
+	@GetMapping("/customers")
+	public List<Customer> getAllCustomers() {
+		return customerRepository.findAll();
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<CustomerEntity> getCustomerById(@PathVariable("id") Long id) throws RecordNotFoundException {
-		CustomerEntity customer = customerService.getCustomerById(id);
-		
-		return new ResponseEntity<CustomerEntity>(customer, new HttpHeaders(), HttpStatus.OK);
+	@GetMapping("/customers/{id}")
+	public ResponseEntity<Customer> getCustomerById(@PathVariable(value = "id") Long id)
+			throws ResourceNotFoundException {
+		Customer customer = customerRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Customer not found for this id :: " + id));
+		return ResponseEntity.ok().body(customer);
 	}
 	
-	@PostMapping
-	public ResponseEntity<CustomerEntity> createOrUpdateCustomer(CustomerEntity customer) throws RecordNotFoundException {
-		CustomerEntity updated = customerService.createOrUpdateCustomer(customer);
-		
-		return new ResponseEntity<CustomerEntity>(updated, new HttpHeaders(), HttpStatus.OK);
+	@PostMapping("/customers")
+	public Customer createCustomer(@Valid @RequestBody Customer customer) {
+		System.out.println(customer.getId());
+		return customerRepository.save(customer);
 	}
 	
-	@DeleteMapping("/{id}")
-	public HttpStatus deleteCustomerById(@PathVariable("id") Long id) throws RecordNotFoundException{
-		customerService.deleteCustomerByID(id);
-		return HttpStatus.FORBIDDEN;
+	@PutMapping("/customers/{id}")
+	public ResponseEntity<Customer> updateEmployee(@PathVariable(value = "id") Long id,
+			@Valid @RequestBody Customer customerDetails) throws ResourceNotFoundException {
+		Customer customer = customerRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
+		
+		customer.setName(customerDetails.getName());
+		customer.setAddress(customerDetails.getAddress());
+		customer.setState(customerDetails.getState());
+		customer.setCity(customerDetails.getCity());
+		customer.setZip(customerDetails.getZip());
+		
+		final Customer updatedCustomer = customerRepository.save(customer);
+		return ResponseEntity.ok(updatedCustomer);
+	}
+	
+	@DeleteMapping("/customers/{id}")
+	public Map<String, Boolean> deleteCustomer(@PathVariable(value = "id") Long id)
+			throws ResourceNotFoundException {
+		Customer customer = customerRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
+
+		customerRepository.delete(customer);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
 	}
 }

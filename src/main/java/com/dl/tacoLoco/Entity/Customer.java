@@ -3,48 +3,41 @@ package com.dl.tacoLoco.Entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "CUSTOMERS")
-public class CustomerEntity {
-	@Id @GeneratedValue
-	@Column(name = "ID")
-	private long id;
-	
-	@Column(name = "NAME")
-	private String name;
-	
-	@Column(name = "ADDRESS")
-	private String address;
-	
-	@Column(name = "STATE")
-	private String state;
-	
-	@Column(name = "CITY")
-	private String city;
-	
-	@Column(name = "ZIPCODE")
-	private String zipcode;
+public class Customer {
 
-	public CustomerEntity() {}
+	private long id;
+	private String name;
+	private String address;
+	private String state;
+	private String city;
+	private String zip;
+
+	public Customer() {}
 	
-	public CustomerEntity(int id, String name, String address, String state, String city, String zipcode) {
+	public Customer(int id, String name, String address, String state, String city, String zip) {
 		this.id = id;
 		this.name = name;
 		this.address = address;
 		this.state = state;
 		this.city = city;
-		this.zipcode = zipcode;
+		this.zip = zip;
 	}
 	
 	@Override
 	public String toString() {
 		return "CustomerEntity [id=" + id + ", name=" + name + ", address=" + address 
-				+ ", state=" + state + ", city=" + city + ", zipcode=" + zipcode + "]";
+				+ ", state=" + state + ", city=" + city + ", zip=" + zip + "]";
 	}
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "ID")
 	public long getId() {
 		return id;
 	}
@@ -52,6 +45,7 @@ public class CustomerEntity {
 		this.id = id;
 	}
 
+	@Column(name = "NAME", nullable = false)
 	public String getName() {
 		return name;
 	}
@@ -59,6 +53,7 @@ public class CustomerEntity {
 		this.name = name;
 	}
 
+	@Column(name = "ADDRESS", nullable = false)
 	public String getAddress() {
 		return address;
 	}
@@ -66,6 +61,7 @@ public class CustomerEntity {
 		this.address = address;
 	}
 
+	@Column(name = "STATE", nullable = false)
 	public String getState() {
 		return state;
 	}
@@ -73,6 +69,7 @@ public class CustomerEntity {
 		this.state = state;
 	}
 
+	@Column(name = "CITY", nullable = false)
 	public String getCity() {
 		return city;
 	}
@@ -80,10 +77,11 @@ public class CustomerEntity {
 		this.city = city;
 	}
 
-	public String getZipcode() {
-		return zipcode;
+	@Column(name = "ZIP", nullable = false)
+	public String getZip() {
+		return zip;
 	}
-	public void setZipcode(String zipcode) {
-		this.zipcode = zipcode;
+	public void setZip(String zip) {
+		this.zip = zip;
 	}
 }

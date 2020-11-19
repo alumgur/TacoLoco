@@ -6,13 +6,7 @@ CREATE TABLE CUSTOMERS (
 	ADDRESS VARCHAR(250) NOT NULL,
 	STATE VARCHAR(50) NOT NULL,
 	CITY VARCHAR(50) NOT NULL,
-	ZIPCODE VARCHAR(10) NOT NULL,
+	ZIP VARCHAR(50) NOT NULL,
 	PRIMARY KEY (ID)
 );
-
-INSERT INTO CUSTOMERS (NAME, ADDRESS, STATE, CITY, ZIPCODE) VALUES
-	('Alum Uddin', '123 Street', 'MI', 'Detroit', '48212'),
-	('Pedro Gutierrez', '1520 Woodward Ave STE 600', 'MI', 'Detroit', '48226'),
-	('John Doe', '12345 Any Street', 'MI', 'Warren', '48092'),
-	('Mary Jane', '321 That Street', 'MI', 'Farmington Hills', '48335');
 	
