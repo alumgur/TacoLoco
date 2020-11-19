@@ -35,6 +35,8 @@ public class Customer {
 				+ ", state=" + state + ", city=" + city + ", zip=" + zip + "]";
 	}
 	
+	// Getters and Setter along with annotations to connect them H2 db
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")

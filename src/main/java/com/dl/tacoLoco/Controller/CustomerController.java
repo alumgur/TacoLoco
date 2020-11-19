@@ -22,6 +22,7 @@ import com.dl.tacoLoco.Entity.Customer;
 import com.dl.tacoLoco.Exception.ResourceNotFoundException;
 import com.dl.tacoLoco.Repository.CustomerRepository;
 
+// Enables Angular app to communicate with H2 that is alive on port 8080
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1")
